@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Set;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
@@ -28,9 +27,9 @@ public class InsertBaseMongo {
 				+ "INNER JOIN directors d  ON d.id = mv.id LIMIT 10";
 
 		Statement stm = con.createStatement();
-
 		ResultSet rs = stm.executeQuery(sql);
 
+		int i = 0;
 		while (rs.next()) {
 
 			BasicDBObject documentFilmes = new BasicDBObject();
@@ -42,20 +41,19 @@ public class InsertBaseMongo {
 			BasicDBObject documentDiretors = new BasicDBObject();
 			documentDiretors.append("director_id", rs.getString("director_id"))
 					.append("first_name", rs.getString("first_name"))
-					.append("last_name", rs.getString("last_name"))
-					.append("diretor", documentDiretors);
+					.append("last_name", rs.getString("last_name"));
 
-			//insere o documento na base Mongo
+			documentFilmes.append("diretor", documentDiretors);
+
+			// insere o documento na base Mongo
 			tabelaFilme.insert(documentFilmes);
-			
-			//Imprimir JSONs da coleção
-			Set<String> colls = db.getCollectionNames();
-			for (String s : colls) {
-				System.out.println(s);
-			}
-			
+
+			i += 1;
+			// Exibir JSON no console
+			System.out.println(i + " - " + documentFilmes);
+
 		}
 		con.close();
 	}
-	
+
 }
