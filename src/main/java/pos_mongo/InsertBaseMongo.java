@@ -22,9 +22,9 @@ public class InsertBaseMongo {
 		con = ConexaoMySQL.getConexaoMySQL();
 
 		String sql = "SELECT mv.id as id_filme, name, year, rank, director_id, first_name, last_name "
-				+ "FROM movies as mv "
-				+ "INNER JOIN movies_directors md ON md.director_id = mv.id "
-				+ "INNER JOIN directors d  ON d.id = mv.id LIMIT 10";
+				+ "FROM movies_directors as md "
+				+ "INNER JOIN movies mv ON md.movie_id = mv.id "
+				+ "INNER JOIN directors d ON d.id = md.director_id";
 
 		Statement stm = con.createStatement();
 		ResultSet rs = stm.executeQuery(sql);
